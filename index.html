@@ -256,6 +256,18 @@
 
   <div class="progress" id="progress"></div>
 
+  <!-- hidden form so Netlify's build step detects & registers it; real submission happens via JS fetch below -->
+  <form name="laci-date-response" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="text" name="willGo">
+    <input type="text" name="cuisine">
+    <input type="text" name="date">
+    <input type="text" name="time">
+    <input type="text" name="pickupSpot">
+    <input type="text" name="comment">
+    <input type="text" name="timestamp">
+    <input name="bot-field">
+  </form>
+
   <!-- Step 0: The big question -->
   <div class="step active" data-step="0">
     <p class="question">Hey Laci, will you go on a date with me? 🥺💕</p>
@@ -377,6 +389,22 @@
     );
     console.log(JSON.parse(JSON.stringify(responses)));
     localStorage.setItem('laciDateResponses', JSON.stringify(responses));
+  }
+
+  function encodeFormData(data) {
+    return Object.keys(data)
+      .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(data[k] ?? ''))
+      .join('&');
+  }
+
+  // Submits into Netlify Forms (only works once this page is actually deployed on Netlify).
+  // Visible in your Netlify dashboard under Site -> Forms -> laci-date-response. No email sent.
+  function submitToNetlifyForms() {
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encodeFormData({ 'form-name': 'laci-date-response', ...responses })
+    }).catch(err => console.warn('Netlify form submit failed (not hosted on Netlify?)', err));
   }
 
   // ---------- step navigation ----------
@@ -548,6 +576,7 @@
     responses.comment = commentInput.value.trim() || '(no comment left)';
     responses.timestamp = new Date().toLocaleString();
     logResponses('🎉 FINAL RESPONSE FROM LACI 🎉');
+    submitToNetlifyForms();
 
     document.getElementById('recap').innerHTML = `
       <div><b>Going on the date:</b> ${responses.willGo}</div>
