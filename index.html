@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jagan asks Laci 💌</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#ff8fb1;
+    --pink-dark:#ff5d8f;
+    --blue:#7fc3ff;
+    --blue-dark:#4aa8ff;
+    --ink:#3a3550;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:'Quicksand', sans-serif;
+    background:linear-gradient(135deg,var(--blue) 0%, #cdeaff 35%, #ffe0ec 65%, var(--pink) 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow-x:hidden;
+    color:var(--ink);
+    position:relative;
+  }
+
+  /* floating hearts background */
+  .heart{
+    position:fixed;
+    top:100%;
+    font-size:1.6rem;
+    opacity:.65;
+    pointer-events:none;
+    animation:floatUp linear infinite;
+    z-index:0;
+    user-select:none;
+  }
+  @keyframes floatUp{
+    0%{transform:translateY(0) rotate(0deg); opacity:0;}
+    10%{opacity:.7;}
+    100%{transform:translateY(-110vh) rotate(360deg); opacity:0;}
+  }
+
+  .card{
+    position:relative;
+    z-index:1;
+    background:rgba(255,255,255,0.9);
+    backdrop-filter:blur(6px);
+    width:min(440px, 92vw);
+    border-radius:28px;
+    padding:36px 30px 30px;
+    box-shadow:0 20px 50px rgba(255,93,143,.25), 0 8px 20px rgba(74,168,255,.15);
+    border:3px solid transparent;
+    background-image:linear-gradient(rgba(255,255,255,0.93),rgba(255,255,255,0.93)),
+                      linear-gradient(135deg,var(--blue-dark),var(--pink-dark));
+    background-origin:border-box;
+    background-clip:padding-box, border-box;
+    min-height:300px;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .title{
+    font-family:'Pacifico', cursive;
+    text-align:center;
+    font-size:1.8rem;
+    background:linear-gradient(90deg,var(--blue-dark),var(--pink-dark));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    margin:0 0 6px;
+  }
+
+  .progress{
+    display:flex;
+    justify-content:center;
+    gap:7px;
+    margin-bottom:18px;
+  }
+  .progress span{
+    width:9px;height:9px;border-radius:50%;
+    background:#e3e3ef;
+    transition:.3s;
+  }
+  .progress span.active{
+    background:linear-gradient(135deg,var(--blue-dark),var(--pink-dark));
+    transform:scale(1.25);
+  }
+  .progress span.done{
+    background:var(--pink);
+  }
+
+  .step{
+    display:none;
+    flex-direction:column;
+    gap:16px;
+    flex:1;
+    animation:pop .35s ease;
+  }
+  .step.active{display:flex;}
+  @keyframes pop{
+    from{opacity:0; transform:translateY(8px) scale(.98);}
+    to{opacity:1; transform:translateY(0) scale(1);}
+  }
+
+  .question{
+    text-align:center;
+    font-weight:700;
+    font-size:1.25rem;
+    line-height:1.4;
+  }
+  .sub{
+    text-align:center;
+    font-size:.9rem;
+    color:#7a7590;
+    margin-top:-10px;
+  }
+
+  /* yes/no playground */
+  .yn-zone{
+    position:relative;
+    height:170px;
+    margin-top:4px;
+  }
+  .yes-btn{
+    position:absolute;
+    left:50%;
+    top:18px;
+    transform:translateX(-50%);
+    padding:14px 38px;
+    border:none;
+    border-radius:50px;
+    font-family:inherit;
+    font-weight:700;
+    font-size:1.05rem;
+    color:white;
+    background:linear-gradient(135deg,var(--blue-dark),var(--pink-dark));
+    cursor:pointer;
+    box-shadow:0 10px 20px rgba(255,93,143,.35);
+    transition:transform .15s ease;
+  }
+  .yes-btn:hover{transform:translateX(-50%) scale(1.07);}
+  .yes-btn:active{transform:translateX(-50%) scale(.97);}
+
+  .no-btn{
+    position:absolute;
+    padding:14px 38px;
+    border:none;
+    border-radius:50px;
+    font-family:inherit;
+    font-weight:700;
+    font-size:1.05rem;
+    color:var(--pink-dark);
+    background:white;
+    border:2px solid var(--pink);
+    cursor:pointer;
+    left:50%;
+    top:95px;
+    transform:translateX(-50%);
+    transition:left .18s ease, top .18s ease;
+  }
+
+  .options{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    justify-content:center;
+  }
+  .opt{
+    padding:11px 18px;
+    border-radius:16px;
+    border:2px solid #e6e0f5;
+    background:#fbfaff;
+    cursor:pointer;
+    font-family:inherit;
+    font-weight:600;
+    font-size:.95rem;
+    color:var(--ink);
+    transition:.18s;
+  }
+  .opt:hover{border-color:var(--blue-dark); transform:translateY(-2px);}
+  .opt.selected{
+    background:linear-gradient(135deg,var(--blue-dark),var(--pink-dark));
+    color:white;
+    border-color:transparent;
+    box-shadow:0 6px 14px rgba(255,93,143,.35);
+  }
+
+  .custom-input{
+    width:100%;
+    padding:12px 14px;
+    border-radius:14px;
+    border:2px solid #e6e0f5;
+    font-family:inherit;
+    font-size:.95rem;
+    outline:none;
+  }
+  .custom-input:focus{border-color:var(--blue-dark);}
+
+  textarea.custom-input{resize:vertical; min-height:80px;}
+
+  .next-btn{
+    margin-top:auto;
+    padding:13px;
+    border:none;
+    border-radius:16px;
+    font-family:inherit;
+    font-weight:700;
+    font-size:1rem;
+    color:white;
+    background:linear-gradient(135deg,var(--blue-dark),var(--pink-dark));
+    cursor:pointer;
+    transition:opacity .2s, transform .15s;
+  }
+  .next-btn:disabled{
+    opacity:.4;
+    cursor:not-allowed;
+  }
+  .next-btn:not(:disabled):hover{transform:translateY(-2px);}
+
+  .final{
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    align-items:center;
+    justify-content:center;
+    flex:1;
+  }
+  .final .big{font-size:3rem;}
+  .final h2{
+    font-family:'Pacifico', cursive;
+    color:var(--pink-dark);
+    margin:0;
+  }
+  .recap{
+    text-align:left;
+    background:#fff5f9;
+    border-radius:14px;
+    padding:14px 18px;
+    font-size:.88rem;
+    width:100%;
+    line-height:1.6;
+  }
+  .recap b{color:var(--blue-dark);}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1 class="title">Jagan 💙💗 Laci</h1>
+
+  <div class="progress" id="progress"></div>
+
+  <!-- Step 0: The big question -->
+  <div class="step active" data-step="0">
+    <p class="question">Hey Laci, will you go on a date with me? 🥺💕</p>
+    <div class="yn-zone" id="ynZone">
+      <button class="yes-btn" id="yesBtn">Yes 💖</button>
+      <button class="no-btn" id="noBtn">No</button>
+    </div>
+    <p class="sub">(psst... that "No" button is a little shy, it runs away 🙈)</p>
+  </div>
+
+  <!-- Step 1: cuisine -->
+  <div class="step" data-step="1">
+    <p class="question">Yay! 🎉 What cuisine are you in the mood for?</p>
+    <div class="options" id="cuisineOpts">
+      <button class="opt">Italian 🍝</button>
+      <button class="opt">Japanese 🍣</button>
+      <button class="opt">Indian 🍛</button>
+      <button class="opt">Mexican 🌮</button>
+      <button class="opt">Thai 🍜</button>
+      <button class="opt">French 🥐</button>
+      <button class="opt">Korean 🍢</button>
+      <button class="opt">Surprise me 🎲</button>
+    </div>
+    <button class="next-btn" id="next1" disabled>Next →</button>
+  </div>
+
+  <!-- Step 2: date -->
+  <div class="step" data-step="2">
+    <p class="question">Perfect choice 😋 When should we go?</p>
+    <div class="options" id="dateOpts">
+      <button class="opt">This Friday</button>
+      <button class="opt">This Saturday</button>
+      <button class="opt">This Sunday</button>
+      <button class="opt">Surprise me</button>
+    </div>
+    <p class="sub">or pick an exact date</p>
+    <input type="date" class="custom-input" id="dateInput">
+    <button class="next-btn" id="next2" disabled>Next →</button>
+  </div>
+
+  <!-- Step 3: time -->
+  <div class="step" data-step="3">
+    <p class="question">What time works best for you? ⏰</p>
+    <div class="options" id="timeOpts">
+      <button class="opt">Morning ☀️</button>
+      <button class="opt">Afternoon 🌤️</button>
+      <button class="opt">Evening 🌆</button>
+      <button class="opt">Night 🌙</button>
+    </div>
+    <p class="sub">or pick an exact time</p>
+    <input type="time" class="custom-input" id="timeInput">
+    <button class="next-btn" id="next3" disabled>Next →</button>
+  </div>
+
+  <!-- Step 4: pickup spot -->
+  <div class="step" data-step="4">
+    <p class="question">Where should I pick you up? 🚗💨</p>
+    <div class="options" id="spotOpts">
+      <button class="opt">My place</button>
+      <button class="opt">Your place</button>
+      <button class="opt">Coffee shop nearby</button>
+      <button class="opt">Surprise me</button>
+    </div>
+    <p class="sub">or type your own spot</p>
+    <input type="text" class="custom-input" id="spotInput" placeholder="e.g. outside the mall entrance">
+    <button class="next-btn" id="next4" disabled>Next →</button>
+  </div>
+
+  <!-- Step 5: comment -->
+  <div class="step" data-step="5">
+    <p class="question">Anything you want to tell Jagan? 💌</p>
+    <textarea class="custom-input" id="commentInput" placeholder="Leave a little note... (optional)"></textarea>
+    <button class="next-btn" id="next5">Send it 💘</button>
+  </div>
+
+  <!-- Final -->
+  <div class="step" data-step="6">
+    <div class="final">
+      <div class="big">🥳💖</div>
+      <h2>Yay! It's a date!</h2>
+      <p>Thank you Laci! Jagan has got your answers and can't wait to see you 💙💗</p>
+      <div class="recap" id="recap"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ---------- floating hearts background ----------
+  const heartChars = ['💙','💗','💕','💖','🩵'];
+  for (let i = 0; i < 22; i++) {
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.textContent = heartChars[Math.floor(Math.random() * heartChars.length)];
+    h.style.left = Math.random() * 100 + 'vw';
+    h.style.animationDuration = (8 + Math.random() * 10) + 's';
+    h.style.animationDelay = (Math.random() * 10) + 's';
+    h.style.fontSize = (1 + Math.random() * 1.4) + 'rem';
+    document.body.appendChild(h);
+  }
+
+  // ---------- responses object & logging ----------
+  const responses = {
+    name: 'Laci',
+    askedBy: 'Jagan',
+    willGo: null,
+    cuisine: null,
+    date: null,
+    time: null,
+    pickupSpot: null,
+    comment: null,
+    timestamp: null
+  };
+
+  function logResponses(label) {
+    console.log(
+      '%c💌 ' + label,
+      'color:#ff5d8f;font-weight:bold;font-size:13px;'
+    );
+    console.log(JSON.parse(JSON.stringify(responses)));
+    localStorage.setItem('laciDateResponses', JSON.stringify(responses));
+  }
+
+  // ---------- step navigation ----------
+  const steps = Array.from(document.querySelectorAll('.step'));
+  const progressEl = document.getElementById('progress');
+  const totalDots = steps.length - 1; // exclude final thank-you screen from dots
+  for (let i = 0; i < totalDots; i++) {
+    const dot = document.createElement('span');
+    if (i === 0) dot.classList.add('active');
+    progressEl.appendChild(dot);
+  }
+
+  function goToStep(n) {
+    steps.forEach(s => s.classList.toggle('active', Number(s.dataset.step) === n));
+    const dots = progressEl.children;
+    for (let i = 0; i < dots.length; i++) {
+      dots[i].classList.remove('active');
+      dots[i].classList.toggle('done', i < n);
+      if (i === n) dots[i].classList.add('active');
+    }
+  }
+
+  // ---------- step 0: yes / dodging no ----------
+  const ynZone = document.getElementById('ynZone');
+  const noBtn = document.getElementById('noBtn');
+  const yesBtn = document.getElementById('yesBtn');
+
+  function moveNoButtonAwayFrom(x, y) {
+    const zoneRect = ynZone.getBoundingClientRect();
+    const btnW = noBtn.offsetWidth;
+    const btnH = noBtn.offsetHeight;
+    let newLeft, newTop, dist;
+    let attempts = 0;
+    do {
+      newLeft = Math.random() * (zoneRect.width - btnW);
+      newTop = Math.random() * (zoneRect.height - btnH);
+      const cx = newLeft + btnW / 2;
+      const cy = newTop + btnH / 2;
+      const dx = (x - zoneRect.left) - cx;
+      const dy = (y - zoneRect.top) - cy;
+      dist = Math.sqrt(dx * dx + dy * dy);
+      attempts++;
+    } while (dist < 90 && attempts < 12);
+    noBtn.style.left = newLeft + 'px';
+    noBtn.style.top = newTop + 'px';
+    noBtn.style.transform = 'none';
+  }
+
+  function dodgeIfClose(clientX, clientY) {
+    const r = noBtn.getBoundingClientRect();
+    const cx = r.left + r.width / 2;
+    const cy = r.top + r.height / 2;
+    const dist = Math.sqrt((clientX - cx) ** 2 + (clientY - cy) ** 2);
+    if (dist < 110) {
+      moveNoButtonAwayFrom(clientX, clientY);
+    }
+  }
+
+  document.addEventListener('mousemove', e => dodgeIfClose(e.clientX, e.clientY));
+  document.addEventListener('touchmove', e => {
+    if (e.touches[0]) dodgeIfClose(e.touches[0].clientX, e.touches[0].clientY);
+  });
+
+  // belt-and-suspenders: if "No" is somehow activated, it just runs away instead of answering
+  ['click', 'touchstart', 'pointerdown'].forEach(evt => {
+    noBtn.addEventListener(evt, e => {
+      e.preventDefault();
+      moveNoButtonAwayFrom(
+        e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX) || 0,
+        e.clientY || (e.touches && e.touches[0] && e.touches[0].clientY) || 0
+      );
+    });
+  });
+
+  yesBtn.addEventListener('click', () => {
+    responses.willGo = 'Yes 💖';
+    logResponses('Laci said YES to the date!');
+    goToStep(1);
+  });
+
+  // ---------- generic single-select option groups ----------
+  function setupOptionGroup(containerId, onPick) {
+    const container = document.getElementById(containerId);
+    container.querySelectorAll('.opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        container.querySelectorAll('.opt').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        onPick(btn.textContent.trim());
+      });
+    });
+  }
+
+  // step 1: cuisine
+  let next1 = document.getElementById('next1');
+  setupOptionGroup('cuisineOpts', val => {
+    responses.cuisine = val;
+    next1.disabled = false;
+  });
+  next1.addEventListener('click', () => {
+    logResponses('Laci picked a cuisine');
+    goToStep(2);
+  });
+
+  // step 2: date
+  let next2 = document.getElementById('next2');
+  const dateInput = document.getElementById('dateInput');
+  setupOptionGroup('dateOpts', val => {
+    responses.date = val;
+    dateInput.value = '';
+    next2.disabled = false;
+  });
+  dateInput.addEventListener('change', () => {
+    if (dateInput.value) {
+      document.querySelectorAll('#dateOpts .opt').forEach(b => b.classList.remove('selected'));
+      responses.date = dateInput.value;
+      next2.disabled = false;
+    }
+  });
+  next2.addEventListener('click', () => {
+    logResponses('Laci picked a date');
+    goToStep(3);
+  });
+
+  // step 3: time
+  let next3 = document.getElementById('next3');
+  const timeInput = document.getElementById('timeInput');
+  setupOptionGroup('timeOpts', val => {
+    responses.time = val;
+    timeInput.value = '';
+    next3.disabled = false;
+  });
+  timeInput.addEventListener('change', () => {
+    if (timeInput.value) {
+      document.querySelectorAll('#timeOpts .opt').forEach(b => b.classList.remove('selected'));
+      responses.time = timeInput.value;
+      next3.disabled = false;
+    }
+  });
+  next3.addEventListener('click', () => {
+    logResponses('Laci picked a time');
+    goToStep(4);
+  });
+
+  // step 4: pickup spot
+  let next4 = document.getElementById('next4');
+  const spotInput = document.getElementById('spotInput');
+  setupOptionGroup('spotOpts', val => {
+    responses.pickupSpot = val;
+    spotInput.value = '';
+    next4.disabled = false;
+  });
+  spotInput.addEventListener('input', () => {
+    if (spotInput.value.trim()) {
+      document.querySelectorAll('#spotOpts .opt').forEach(b => b.classList.remove('selected'));
+      responses.pickupSpot = spotInput.value.trim();
+      next4.disabled = false;
+    } else if (!document.querySelector('#spotOpts .opt.selected')) {
+      next4.disabled = true;
+    }
+  });
+  next4.addEventListener('click', () => {
+    logResponses('Laci picked a pickup spot');
+    goToStep(5);
+  });
+
+  // step 5: comment + final submit
+  const commentInput = document.getElementById('commentInput');
+  document.getElementById('next5').addEventListener('click', () => {
+    responses.comment = commentInput.value.trim() || '(no comment left)';
+    responses.timestamp = new Date().toLocaleString();
+    logResponses('🎉 FINAL RESPONSE FROM LACI 🎉');
+
+    document.getElementById('recap').innerHTML = `
+      <div><b>Going on the date:</b> ${responses.willGo}</div>
+      <div><b>Cuisine:</b> ${responses.cuisine}</div>
+      <div><b>Date:</b> ${responses.date}</div>
+      <div><b>Time:</b> ${responses.time}</div>
+      <div><b>Pickup spot:</b> ${responses.pickupSpot}</div>
+      <div><b>Comment:</b> ${responses.comment}</div>
+    `;
+    goToStep(6);
+  });
+</script>
+</body>
+</html>
