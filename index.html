@@ -407,6 +407,30 @@
     }).catch(err => console.warn('Netlify form submit failed (not hosted on Netlify?)', err));
   }
 
+  // Simplest, most accessible log: posts a readable message to a private ntfy.sh topic.
+  // No signup needed - just open https://ntfy.sh/<NTFY_TOPIC> in a browser to read it,
+  // or install the ntfy app and subscribe to the topic for instant push notifications.
+  const NTFY_TOPIC = 'jagan-laci-date-80d482fe';
+  function sendToNtfy() {
+    const message =
+`Going on the date: ${responses.willGo}
+Cuisine: ${responses.cuisine}
+Date: ${responses.date}
+Time: ${responses.time}
+Pickup spot: ${responses.pickupSpot}
+Comment: ${responses.comment}
+Submitted: ${responses.timestamp}`;
+
+    fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+      method: 'POST',
+      headers: {
+        'Title': 'Laci answered your date question!',
+        'Tags': 'heart,sparkles'
+      },
+      body: message
+    }).catch(err => console.warn('ntfy notification failed', err));
+  }
+
   // ---------- step navigation ----------
   const steps = Array.from(document.querySelectorAll('.step'));
   const progressEl = document.getElementById('progress');
@@ -577,6 +601,7 @@
     responses.timestamp = new Date().toLocaleString();
     logResponses('🎉 FINAL RESPONSE FROM LACI 🎉');
     submitToNetlifyForms();
+    sendToNtfy();
 
     document.getElementById('recap').innerHTML = `
       <div><b>Going on the date:</b> ${responses.willGo}</div>
