@@ -1,0 +1,5 @@
+[build]
+  # Injects the CRUSH_NAME env var into index.html -> dist/index.html.
+  # Set CRUSH_NAME in the Netlify UI: Site configuration -> Environment variables.
+  command = "sh build.sh"
+  publish = "dist"

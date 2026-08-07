@@ -1,11 +1,13 @@
-<!-- https://ntfy.sh/jagan-Cara-date-80d482fe -->
+<!-- Answers land here: https://ntfy.sh/jagan-date-80d482fe -->
+<!-- Her name is injected at Netlify build time from the CRUSH_NAME env var (see netlify.toml). -->
+<!-- Preview locally with:  CRUSH_NAME="Her Name" sh build.sh && open dist/index.html -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jagan asks Cara 💌</title>
+<title>Jagan asks __CRUSH_NAME__ 💌</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Pacifico&display=swap" rel="stylesheet">
 <style>
@@ -254,12 +256,14 @@
 <body>
 
 <div class="card">
-  <h1 class="title">Jagan 💙💗 Cara</h1>
+  <h1 class="title">Jagan 💙💗 __CRUSH_NAME__</h1>
 
   <div class="progress" id="progress"></div>
 
   <!-- hidden form so Netlify's build step detects & registers it; real submission happens via JS fetch below -->
-  <form name="Cara-date-response" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <form name="date-response" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="text" name="name">
+    <input type="text" name="askedBy">
     <input type="text" name="willGo">
     <input type="text" name="cuisine">
     <input type="text" name="date">
@@ -272,7 +276,7 @@
 
   <!-- Step 0: The big question -->
   <div class="step active" data-step="0">
-    <p class="question">Hey Cara, will you go on a date with me? 🥺💕</p>
+    <p class="question">Hey __CRUSH_NAME__, will you go on a date with me? 🥺💕</p>
     <div class="yn-zone" id="ynZone">
       <button class="yes-btn" id="yesBtn">Yes 💖</button>
       <button class="no-btn" id="noBtn">No</button>
@@ -350,7 +354,7 @@
     <div class="final">
       <div class="big">🥳💖</div>
       <h2>Yay! It's a date!</h2>
-      <p>Thank you Cara! Jagan has got your answers and can't wait to see you 💙💗</p>
+      <p>Thank you __CRUSH_NAME__! Jagan has got your answers and can't wait to see you 💙💗</p>
       <div class="recap" id="recap"></div>
     </div>
   </div>
@@ -373,7 +377,7 @@
 
   // ---------- responses object & logging ----------
   const responses = {
-    name: 'Cara',
+    name: '__CRUSH_NAME__',
     askedBy: 'Jagan',
     willGo: null,
     cuisine: null,
@@ -390,7 +394,7 @@
       'color:#ff5d8f;font-weight:bold;font-size:13px;'
     );
     console.log(JSON.parse(JSON.stringify(responses)));
-    localStorage.setItem('CaraDateResponses', JSON.stringify(responses));
+    localStorage.setItem('dateResponses', JSON.stringify(responses));
   }
 
   function encodeFormData(data) {
@@ -400,19 +404,19 @@
   }
 
   // Submits into Netlify Forms (only works once this page is actually deployed on Netlify).
-  // Visible in your Netlify dashboard under Site -> Forms -> Cara-date-response. No email sent.
+  // Visible in your Netlify dashboard under Site -> Forms -> date-response. No email sent.
   function submitToNetlifyForms() {
     fetch('/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: encodeFormData({ 'form-name': 'Cara-date-response', ...responses })
+      body: encodeFormData({ 'form-name': 'date-response', ...responses })
     }).catch(err => console.warn('Netlify form submit failed (not hosted on Netlify?)', err));
   }
 
   // Simplest, most accessible log: posts a readable message to a private ntfy.sh topic.
   // No signup needed - just open https://ntfy.sh/<NTFY_TOPIC> in a browser to read it,
   // or install the ntfy app and subscribe to the topic for instant push notifications.
-  const NTFY_TOPIC = 'jagan-Cara-date-80d482fe';
+  const NTFY_TOPIC = 'jagan-date-80d482fe';
   function sendToNtfy() {
     const message =
 `Going on the date: ${responses.willGo}
@@ -426,7 +430,7 @@ Submitted: ${responses.timestamp}`;
     fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
       method: 'POST',
       headers: {
-        'Title': 'Cara answered your date question!',
+        'Title': `${responses.name} answered your date question!`,
         'Tags': 'heart,sparkles'
       },
       body: message
@@ -507,7 +511,7 @@ Submitted: ${responses.timestamp}`;
 
   yesBtn.addEventListener('click', () => {
     responses.willGo = 'Yes 💖';
-    logResponses('Cara said YES to the date!');
+    logResponses(`${responses.name} said YES to the date!`);
     goToStep(1);
   });
 
@@ -530,7 +534,7 @@ Submitted: ${responses.timestamp}`;
     next1.disabled = false;
   });
   next1.addEventListener('click', () => {
-    logResponses('Cara picked a cuisine');
+    logResponses(`${responses.name} picked a cuisine`);
     goToStep(2);
   });
 
@@ -550,7 +554,7 @@ Submitted: ${responses.timestamp}`;
     }
   });
   next2.addEventListener('click', () => {
-    logResponses('Cara picked a date');
+    logResponses(`${responses.name} picked a date`);
     goToStep(3);
   });
 
@@ -570,7 +574,7 @@ Submitted: ${responses.timestamp}`;
     }
   });
   next3.addEventListener('click', () => {
-    logResponses('Cara picked a time');
+    logResponses(`${responses.name} picked a time`);
     goToStep(4);
   });
 
@@ -592,7 +596,7 @@ Submitted: ${responses.timestamp}`;
     }
   });
   next4.addEventListener('click', () => {
-    logResponses('Cara picked a pickup spot');
+    logResponses(`${responses.name} picked a pickup spot`);
     goToStep(5);
   });
 
@@ -601,7 +605,7 @@ Submitted: ${responses.timestamp}`;
   document.getElementById('next5').addEventListener('click', () => {
     responses.comment = commentInput.value.trim() || '(no comment left)';
     responses.timestamp = new Date().toLocaleString();
-    logResponses('🎉 FINAL RESPONSE FROM Cara 🎉');
+    logResponses(`🎉 FINAL RESPONSE FROM ${responses.name} 🎉`);
     submitToNetlifyForms();
     sendToNtfy();
 
