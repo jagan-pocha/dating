@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jagan asks __CRUSH_NAME__ 💌</title>
+<title>Jagan asks __CRUSH_NAME__ ☕</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Pacifico&display=swap" rel="stylesheet">
 <style>
@@ -32,8 +32,8 @@
     position:relative;
   }
 
-  /* floating hearts background */
-  .heart{
+  /* floating coffee-cup background */
+  .floaty{
     position:fixed;
     top:100%;
     font-size:1.6rem;
@@ -256,7 +256,7 @@
 <body>
 
 <div class="card">
-  <h1 class="title">Jagan 💙💗 __CRUSH_NAME__</h1>
+  <h1 class="title">Jagan ☕ __CRUSH_NAME__</h1>
 
   <div class="progress" id="progress"></div>
 
@@ -265,10 +265,10 @@
     <input type="text" name="name">
     <input type="text" name="askedBy">
     <input type="text" name="willGo">
-    <input type="text" name="cuisine">
+    <input type="text" name="drink">
     <input type="text" name="date">
     <input type="text" name="time">
-    <input type="text" name="pickupSpot">
+    <input type="text" name="meetSpot">
     <input type="text" name="comment">
     <input type="text" name="timestamp">
     <input name="bot-field">
@@ -276,25 +276,25 @@
 
   <!-- Step 0: The big question -->
   <div class="step active" data-step="0">
-    <p class="question">Hey __CRUSH_NAME__, will you go on a date with me? 🥺💕</p>
+    <p class="question">Hey __CRUSH_NAME__, would you like to grab a coffee with me?</p>
     <div class="yn-zone" id="ynZone">
-      <button class="yes-btn" id="yesBtn">Yes 💖</button>
+      <button class="yes-btn" id="yesBtn">Yes ☕</button>
       <button class="no-btn" id="noBtn">No</button>
     </div>
     <p class="sub">(psst... that "No" button is a little shy, it runs away 🙈)</p>
   </div>
 
-  <!-- Step 1: cuisine -->
+  <!-- Step 1: drink -->
   <div class="step" data-step="1">
-    <p class="question">Yay! 🎉 What cuisine are you in the mood for?</p>
-    <div class="options" id="cuisineOpts">
-      <button class="opt">Italian 🍝</button>
-      <button class="opt">Japanese 🍣</button>
-      <button class="opt">Indian 🍛</button>
-      <button class="opt">Mexican 🌮</button>
-      <button class="opt">Thai 🍜</button>
-      <button class="opt">French 🥐</button>
-      <button class="opt">Korean 🍢</button>
+    <p class="question">Nice! ☕ What are you drinking?</p>
+    <div class="options" id="drinkOpts">
+      <button class="opt">Latte</button>
+      <button class="opt">Cappuccino</button>
+      <button class="opt">Filter coffee</button>
+      <button class="opt">Cold brew</button>
+      <button class="opt">Chai 🫖</button>
+      <button class="opt">Green tea 🍵</button>
+      <button class="opt">Hot chocolate</button>
       <button class="opt">Surprise me 🎲</button>
     </div>
     <button class="next-btn" id="next1" disabled>Next →</button>
@@ -302,7 +302,7 @@
 
   <!-- Step 2: date -->
   <div class="step" data-step="2">
-    <p class="question">Perfect choice 😋 When should we go?</p>
+    <p class="question">Good pick 🙂 When works for you?</p>
     <div class="options" id="dateOpts">
       <button class="opt">This Friday</button>
       <button class="opt">This Saturday</button>
@@ -328,33 +328,33 @@
     <button class="next-btn" id="next3" disabled>Next →</button>
   </div>
 
-  <!-- Step 4: pickup spot -->
+  <!-- Step 4: meeting spot -->
   <div class="step" data-step="4">
-    <p class="question">Where should I pick you up? 🚗💨</p>
+    <p class="question">Where should we meet? ☕</p>
     <div class="options" id="spotOpts">
-      <button class="opt">My place</button>
-      <button class="opt">Your place</button>
-      <button class="opt">Coffee shop nearby</button>
+      <button class="opt">Cafe near you</button>
+      <button class="opt">Cafe near me</button>
+      <button class="opt">The usual spot</button>
       <button class="opt">Surprise me</button>
     </div>
     <p class="sub">or type your own spot</p>
-    <input type="text" class="custom-input" id="spotInput" placeholder="e.g. outside the mall entrance">
+    <input type="text" class="custom-input" id="spotInput" placeholder="e.g. the cafe by the mall entrance">
     <button class="next-btn" id="next4" disabled>Next →</button>
   </div>
 
   <!-- Step 5: comment -->
   <div class="step" data-step="5">
-    <p class="question">Anything you want to tell Jagan? 💌</p>
+    <p class="question">Anything you want to tell Jagan?</p>
     <textarea class="custom-input" id="commentInput" placeholder="Leave a little note... (optional)"></textarea>
-    <button class="next-btn" id="next5">Send it 💘</button>
+    <button class="next-btn" id="next5">Send it ☕</button>
   </div>
 
   <!-- Final -->
   <div class="step" data-step="6">
     <div class="final">
-      <div class="big">🥳💖</div>
-      <h2>Yay! It's a date!</h2>
-      <p>Thank you __CRUSH_NAME__! Jagan has got your answers and can't wait to see you 💙💗</p>
+      <div class="big">🎉☕</div>
+      <h2>Coffee it is!</h2>
+      <p>Thank you __CRUSH_NAME__! Jagan has got your answers and will see you then ☕</p>
       <div class="recap" id="recap"></div>
     </div>
   </div>
@@ -362,12 +362,12 @@
 </div>
 
 <script>
-  // ---------- floating hearts background ----------
-  const heartChars = ['💙','💗','💕','💖','🩵'];
+  // ---------- floating coffee-cup background ----------
+  const floatChars = ['☕','🫖','🍪','🥐','✨'];
   for (let i = 0; i < 22; i++) {
     const h = document.createElement('div');
-    h.className = 'heart';
-    h.textContent = heartChars[Math.floor(Math.random() * heartChars.length)];
+    h.className = 'floaty';
+    h.textContent = floatChars[Math.floor(Math.random() * floatChars.length)];
     h.style.left = Math.random() * 100 + 'vw';
     h.style.animationDuration = (8 + Math.random() * 10) + 's';
     h.style.animationDelay = (Math.random() * 10) + 's';
@@ -380,17 +380,17 @@
     name: '__CRUSH_NAME__',
     askedBy: 'Jagan',
     willGo: null,
-    cuisine: null,
+    drink: null,
     date: null,
     time: null,
-    pickupSpot: null,
+    meetSpot: null,
     comment: null,
     timestamp: null
   };
 
   function logResponses(label) {
     console.log(
-      '%c💌 ' + label,
+      '%c☕ ' + label,
       'color:#ff5d8f;font-weight:bold;font-size:13px;'
     );
     console.log(JSON.parse(JSON.stringify(responses)));
@@ -419,19 +419,19 @@
   const NTFY_TOPIC = 'jagan-date-80d482fe';
   function sendToNtfy() {
     const message =
-`Going on the date: ${responses.willGo}
-Cuisine: ${responses.cuisine}
+`Coming for coffee: ${responses.willGo}
+Drink: ${responses.drink}
 Date: ${responses.date}
 Time: ${responses.time}
-Pickup spot: ${responses.pickupSpot}
+Meeting spot: ${responses.meetSpot}
 Comment: ${responses.comment}
 Submitted: ${responses.timestamp}`;
 
     fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
       method: 'POST',
       headers: {
-        'Title': `${responses.name} answered your date question!`,
-        'Tags': 'heart,sparkles'
+        'Title': `${responses.name} answered your coffee invite!`,
+        'Tags': 'coffee,sparkles'
       },
       body: message
     }).catch(err => console.warn('ntfy notification failed', err));
@@ -510,8 +510,8 @@ Submitted: ${responses.timestamp}`;
   });
 
   yesBtn.addEventListener('click', () => {
-    responses.willGo = 'Yes 💖';
-    logResponses(`${responses.name} said YES to the date!`);
+    responses.willGo = 'Yes ☕';
+    logResponses(`${responses.name} said YES to coffee!`);
     goToStep(1);
   });
 
@@ -527,14 +527,14 @@ Submitted: ${responses.timestamp}`;
     });
   }
 
-  // step 1: cuisine
+  // step 1: drink
   let next1 = document.getElementById('next1');
-  setupOptionGroup('cuisineOpts', val => {
-    responses.cuisine = val;
+  setupOptionGroup('drinkOpts', val => {
+    responses.drink = val;
     next1.disabled = false;
   });
   next1.addEventListener('click', () => {
-    logResponses(`${responses.name} picked a cuisine`);
+    logResponses(`${responses.name} picked a drink`);
     goToStep(2);
   });
 
@@ -578,25 +578,25 @@ Submitted: ${responses.timestamp}`;
     goToStep(4);
   });
 
-  // step 4: pickup spot
+  // step 4: meeting spot
   let next4 = document.getElementById('next4');
   const spotInput = document.getElementById('spotInput');
   setupOptionGroup('spotOpts', val => {
-    responses.pickupSpot = val;
+    responses.meetSpot = val;
     spotInput.value = '';
     next4.disabled = false;
   });
   spotInput.addEventListener('input', () => {
     if (spotInput.value.trim()) {
       document.querySelectorAll('#spotOpts .opt').forEach(b => b.classList.remove('selected'));
-      responses.pickupSpot = spotInput.value.trim();
+      responses.meetSpot = spotInput.value.trim();
       next4.disabled = false;
     } else if (!document.querySelector('#spotOpts .opt.selected')) {
       next4.disabled = true;
     }
   });
   next4.addEventListener('click', () => {
-    logResponses(`${responses.name} picked a pickup spot`);
+    logResponses(`${responses.name} picked a meeting spot`);
     goToStep(5);
   });
 
@@ -610,11 +610,11 @@ Submitted: ${responses.timestamp}`;
     sendToNtfy();
 
     document.getElementById('recap').innerHTML = `
-      <div><b>Going on the date:</b> ${responses.willGo}</div>
-      <div><b>Cuisine:</b> ${responses.cuisine}</div>
+      <div><b>Coming for coffee:</b> ${responses.willGo}</div>
+      <div><b>Drink:</b> ${responses.drink}</div>
       <div><b>Date:</b> ${responses.date}</div>
       <div><b>Time:</b> ${responses.time}</div>
-      <div><b>Pickup spot:</b> ${responses.pickupSpot}</div>
+      <div><b>Meeting spot:</b> ${responses.meetSpot}</div>
       <div><b>Comment:</b> ${responses.comment}</div>
     `;
     goToStep(6);
